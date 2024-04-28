@@ -1,9 +1,10 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from .bank_holiday_updater import BankHolidayUpdater
+from .bank_holiday_updater import BankHolidayUpdater, sqlite3, requests
+
 
 class TestBankHolidayUpdater(unittest.TestCase):
-    @patch('bankholidays.bank_holiday_updater.sqlite3.connect')
+    @patch('sqlite3.connect')
     def test_create_database(self, mock_connect):
         mock_cursor = MagicMock()
         mock_conn = MagicMock()
@@ -15,11 +16,12 @@ class TestBankHolidayUpdater(unittest.TestCase):
 
         mock_cursor.execute.assert_called()
 
-    @patch('bankholidays.bank_holiday_updater.requests.get')
+    @patch('requests.get')
     def test_fetch_data_success(self, mock_get):
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {'division1': {'events': [{'title': 'Event1', 'date': '2024-05-01', 'notes': 'Note1', 'bunting': True}]}}
+        mock_response.json.return_value = {'division1': {'events': [
+            {'title': 'Event1', 'date': '2024-05-01', 'notes': 'Note1', 'bunting': True}]}}
         mock_get.return_value = mock_response
 
         updater = BankHolidayUpdater()
@@ -28,7 +30,7 @@ class TestBankHolidayUpdater(unittest.TestCase):
         self.assertIsNotNone(data)
         self.assertEqual(data['division1']['events'][0]['title'], 'Event1')
 
-    @patch('bankholidays.bank_holiday_updater.requests.get')
+    @patch('requests.get')
     def test_fetch_data_failure(self, mock_get):
         mock_response = MagicMock()
         mock_response.status_code = 404
@@ -39,7 +41,7 @@ class TestBankHolidayUpdater(unittest.TestCase):
 
         self.assertIsNone(data)
 
-    @patch('bankholidays.bank_holiday_updater.sqlite3.connect')
+    @patch('sqlite3.connect')
     def test_insert_data(self, mock_connect):
         mock_cursor = MagicMock()
         mock_conn = MagicMock()
@@ -51,16 +53,18 @@ class TestBankHolidayUpdater(unittest.TestCase):
 
         mock_cursor.execute.assert_called()
 
-    @patch('bankholidays.bank_holiday_updater.sqlite3.connect')
+    @patch('sqlite3.connect')
     @patch.object(BankHolidayUpdater, 'fetch_data')
-    def test_fetch_and_cache_data(self, mock_fetch_data,_):
+    def test_fetch_and_cache_data(self, mock_fetch_data, _):
         self.test_create_database()
-        mock_fetch_data.return_value = {'division1': {'events': [{'title': 'Event1', 'date': '2024-05-01', 'notes': 'Note1', 'bunting': True}]}}
+        mock_fetch_data.return_value = {'division1': {'events': [
+            {'title': 'Event1', 'date': '2024-05-01', 'notes': 'Note1', 'bunting': True}]}}
 
         updater = BankHolidayUpdater()
         updater.fetch_and_cache_data()
 
         self.assertEqual(len(updater.fetch_data()), 1)
+
 
 if __name__ == '__main__':
     unittest.main()
