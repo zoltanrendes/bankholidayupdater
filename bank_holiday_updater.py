@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class BankHolidayUpdater:
     def __init__(self, time_loop=60, database_name="bank_holidays.db", api_url=os.getenv("API_URL")):
         self.TIMELOOP = time_loop
@@ -39,6 +40,8 @@ class BankHolidayUpdater:
                      bunting INTEGER
                      )''')
         # Create indexes
+        c.execute(
+            "CREATE INDEX IF NOT EXISTS idx_division ON bank_holidays (division)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_title ON bank_holidays (title)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_date ON bank_holidays (date)")
         conn.commit()
@@ -78,6 +81,7 @@ class BankHolidayUpdater:
                 self.fetch_and_cache_data()
             # Sleep for specified time
             time.sleep(self.TIMELOOP)
+
 
 if __name__ == "__main__":
     updater = BankHolidayUpdater()
