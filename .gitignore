@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyw
+
+# Environment
+.env
+venv/
+env/
+env.bak/
+env1/
+venv1/
+log/
+*.log
+
+# Compiled files
+*.pyc
+
+# Dependency directories
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+.pytest_cache/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Distribution / packaging
+.Python
+*.exe
+*.msi
+*.zip
+*.tar.gz
+*.tgz
+*.bz2
+*.iso
+*.dmg
+*.whl
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*~
