@@ -2,7 +2,7 @@
 
 ## In England And Wales, Scotland And Northern Ireland
 
-The Bank Holiday Updater is a Python class designed to fetch bank holiday data from a specified free API endpoint, cache it in a SQLite database, and periodically update the database with the latest bank holiday information.
+The Bank Holiday Updater is a Python class designed to fetch the bank holiday data from a specified free API endpoint, cache it in a SQLite database, and periodically update the database with the latest bank holiday information.
 
 ## Endpoint that can be used with this example
 

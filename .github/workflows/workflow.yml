@@ -1,0 +1,39 @@
+name: Run pytest
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run pytest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.18 # Change this to match your Python version
+
+      - name: Check if virtual environment exists
+        run: |
+          if [ ! -d "env" ]; then
+            python -m venv env
+          fi
+
+      - name: Install dependencies
+        run: |
+          source ./env/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run pytest
+        run: |
+          source ./env/bin/activate && pytest ./test_bank_holiday_updater.py
